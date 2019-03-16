@@ -639,7 +639,7 @@ body a:hover {
 }
 .artist__content .overview__artist {
   padding-right: 15px;
-  width: 70%;
+  width: 100%;
 }
 .artist__content .overview__artist .latest-release {
   margin-bottom: 30px;
@@ -654,7 +654,7 @@ body a:hover {
   height: 75px;
 }
 .artist__content .overview__artist .latest-release__song {
-  width: calc( 100% - 75px );
+  width: 100%;
   padding: 10px 15px;
   background: #282828;
   color: #aaaaaa;
