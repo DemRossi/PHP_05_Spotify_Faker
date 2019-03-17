@@ -1,4 +1,27 @@
-<!DOCTYPE html>
+<?php
+    if( !empty($_POST) ){
+        $conn = new PDO("mysql:host=localhost;dbname=spotify", "root", "");
+        $email = htmlspecialchars($_POST['email']);
+        $password = $_POST['password'];
+
+        //SELECT * FROM `users` WHERE email = 'wesleywijsen@hotmail.com'
+        $statement = $conn->prepare("select * from users where email = :email");
+        $statement->bindParam(":email", $email);
+        $statement->execute();
+
+        $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+        if( password_verify($password, $user['password']) ){
+            echo "gelukt";
+
+        }
+        else{
+            echo 'mislukt';
+            $error = true;
+        }
+
+    }
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,11 +41,13 @@
                 <form action="" method="post">
                     <h2 form__title>Sign In</h2>
 
-                    <div class="form__error">
-                        <p>
-                            Sorry, we can't log you in with that email address and password. Can you try again?
-                        </p>
-                    </div>
+                    <?php if( isset($error) ): ?>
+                        <div class="form__error">
+                            <p>
+                                Sorry, we can't log you in with that email address and password. Can you try again?
+                            </p>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="form__field">
                         <label for="Email">Email</label>
@@ -39,7 +64,7 @@
                     </div>
 
                     <div>
-                        <p>No account yet?<a href="register.php">Sign up here</a></p>
+                        <p>No account yet? <a href="register.php">Sign up here</a></p>
                     </div>
                 </form>
             </div>
