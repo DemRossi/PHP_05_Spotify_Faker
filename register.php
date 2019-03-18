@@ -8,12 +8,8 @@
         
         if( $user->register() ){
             //echo "😂😂😂";
-            header('Location: artist.php');
+            header('Location: index.php');
         }
-        //var_dump($result);
-
-
-        
 
         //if($password == $passwordConfirm){
 

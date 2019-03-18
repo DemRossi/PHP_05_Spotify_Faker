@@ -269,6 +269,9 @@ body a:hover {
   }
 }
 .current-track {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
   background: #282828;
   padding: 5px 15px;
   display: flex;
