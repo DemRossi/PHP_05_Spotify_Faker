@@ -1,30 +1,26 @@
 <?php
+    require_once("classes/User.class.php");
     if( !empty($_POST) ){
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        $passwordConfirm = $_POST['password_confirmation'];
+        $user = new User();
+        $user->setEmail(htmlspecialchars($_POST['email']));
+        $user->setPassword($_POST['password']);
+        $user->setPasswordConfig($_POST['passwordConfig']);
+        
+        if( $user->register() ){
+            //echo "😂😂😂";
+            header('Location: artist.php');
+        }
+        //var_dump($result);
 
-        $options = [
-            'cost' => 15
-        ];
+
         
 
-        if($password == $passwordConfirm){
+        //if($password == $passwordConfirm){
 
-            $hash = password_hash($password, PASSWORD_DEFAULT, $options);
-
-            $conn = new PDO("mysql:host=localhost;dbname=spotify", "root", "");
-            //INSERT INTO users (email, password) VALUES ("tester2", "test2")
-            $statement = $conn->prepare('insert INTO users (email, password) VALUES (:email, :password)');
-            $statement->bindParam(":email", $email);
-            $statement->bindParam(":password", $hash);
-            //var_dump($statement);
-            $result = $statement->execute();
-            return $result;
-        }
-        else {
-            $error = true;
-        }
+        //}
+        //else {
+        //    $error = true;
+        //}
         
         
     }
@@ -65,7 +61,7 @@
                     </div>
                     <div class="form__field">
 					    <label for="password_confirmation">Confirm your password</label>
-					    <input type="password" id="password_confirmation" name="password_confirmation">
+					    <input type="password" id="password_confirmation" name="passwordConfig">
 				    </div>
 
                     <div class="form__field">
