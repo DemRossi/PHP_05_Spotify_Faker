@@ -7,16 +7,11 @@
         $user->setPasswordConfig($_POST['passwordConfig']);
         
         if( $user->register() ){
-            //echo "😂😂😂";
+            //session_start();
             header('Location: index.php');
+        }else {
+            $error = true;
         }
-
-        //if($password == $passwordConfirm){
-
-        //}
-        //else {
-        //    $error = true;
-        //}
         
         
     }
