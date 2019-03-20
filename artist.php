@@ -1,4 +1,30 @@
-<!DOCTYPE html>
+<?php
+    session_start();
+    if( isset($_SESSION['User']) ){
+      //user is logged in
+    }else{
+      //User not logged in
+      header('Location: login.php');
+    }
+
+  $id = $_GET['id'];
+  //var_dump($id);
+  $conn = new PDO("mysql:host=localhost;dbname=spotify", "root", "");
+  //statement for albums
+  $stmnt = $conn->prepare("select * from albums where artist_id = :id");
+  $stmnt->bindParam(":id", $id);
+  $stmnt->execute();
+  $allAlbums = $stmnt->fetchAll();
+  //var_dump($allAlbums);
+  //statement for tracks
+  $stmnt2 = $conn->prepare("select * from `tracks` where album_id = :id");
+  $stmnt2->bindParam(":id", $id);
+  $stmnt2->execute();
+  $allTracks = $stmnt2->fetchAll();
+  
+
+  
+?><!DOCTYPE html>
 <html lang="en" >
 
 <head>
@@ -70,9 +96,7 @@
       
       <span class="user__info__name">
       
-        <span class="first">Adam</span>
-        
-        <span class="last">Lowenthal</span>
+        <span class="first"><?php echo $_SESSION['Username']; ?></span>
         
       </span>
       
@@ -88,7 +112,7 @@
           <li><a href="#">Private Session</a></li>
           <li><a href="#">Account</a></li>
           <li><a href="#">Settings</a></li>
-          <li><a href="#">Log Out</a></li>
+          <li><a href="logout.php">Log Out</a></li>
         </ul>
       </div>
       
@@ -356,10 +380,6 @@
               <a href="#related-artists" aria-controls="related-artists" role="tab" data-toggle="tab">Related Artists</a>
             </li>
             
-            <!--<li role="presentation">
-              <a href="#artist-about" aria-controls="artist-about" role="tab" data-toggle="tab">About</a>
-            </li>-->
-            
           </ul>
           
           <div class="artist__navigation__friends">
@@ -391,81 +411,6 @@
             
             <div class="overview">
             
-              <div class="overview__artist">
-            
-                <!-- Latest Release-->
-                <div class="section-title">Latest Release</div>
-
-                <div class="latest-release">
-
-                  <div class="latest-release__art">
-
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
-
-                  </div>
-
-                  <div class="latest-release__song">
-
-                    <div class="latest-release__song__title">Drifting (Track Commentary)</div>
-
-                    <div class="latest-release__song__date">
-
-                      <span class="day">4</span>
-
-                      <span class="month">December</span>
-
-                      <span class="year">2015</span>
-
-                    </div>
-
-                  </div>
-
-                </div>
-                <!-- / -->
-
-                <!-- Popular -->
-                <div class="section-title">Popular</div>
-
-                <div class="tracks">
-
-                  <div class="track">
-
-                    <div class="track__art">
-
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
-
-                    </div>
-
-                    <div class="track__number">1</div>
-
-                    <div class="track__added">
-
-                      <i class="ion-checkmark-round added"></i>
-
-                    </div>
-
-                    <div class="track__title">Me, Myself & I</div>
-
-                    <div class="track__explicit">
-
-                      <span class="label">Explicit</span>
-
-                    </div>
-
-                    <div class="track__plays">147,544,165</div>
-
-                  </div>
-
-                  
-
-                </div>
-
-                <button class="show-more button-light">Show 5 More</button>
-                <!-- / -->
-              
-              </div>
-            
-              
 
               <div class="overview__albums">
               
@@ -482,14 +427,17 @@
                   </span>
                 
                 </div>
-                
-                <div class="album">
+                <?php 
+                  
+                  foreach($allAlbums as $a):
+                ?>
+                <div class="album"><!--hier-->
                 
                   <div class="album__info">
                   
                     <div class="album__info__art">
                     
-                      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/7022/whenDarkOut.jpg" alt="When It's Dark Out" />
+                      <img src="<?php echo $a['cover']?>" alt="When It's Dark Out" />
                       
                     </div>
                     
@@ -497,7 +445,7 @@
                     
                       <div class="album__year">2015</div>
                       
-                      <div class="album__name">When It's Dark Out</div>
+                      <div class="album__name"><?php echo $a['title'] ?></div>
                       
                       <div class="album__actions">
                       
@@ -536,10 +484,14 @@
                         </div>
                         
                       </div>
-
+                    <!-- start-->
+                    <?php
+                    $i = 1;
+                      foreach($allTracks as $t):
+                    ?>
                       <div class="track">
 
-                        <div class="track__number">1</div>
+                        <div class="track__number"><?php echo $i++; ?></div>
 
                         <div class="track__added">
 
@@ -547,7 +499,7 @@
 
                         </div>
 
-                        <div class="track__title">Intro</div>
+                        <div class="track__title"><?php echo $t['title']; ?></div>
 
                         <div class="track__explicit">
 
@@ -564,15 +516,19 @@
                         </div>
 
                       </div>
-                      
-                      
+                      <!-- end-->
+                        <?php
+                          endforeach;
+                        ?>
 
                     </div>
                     
                   </div>
                   
-                </div>
-                
+                </div><!--deze-->
+                <?php
+                  endforeach;
+                ?>
               </div>
               
             </div>

@@ -12,8 +12,11 @@
         $user = $statement->fetch(PDO::FETCH_ASSOC);
 
         if( password_verify($password, $user['password']) ){
-            echo "gelukt";
-
+            //echo "gelukt";
+            session_start();
+            $_SESSION['User'] = true;
+            $_SESSION['Username'] = $email;
+            header('Location: index.php');
         }
         else{
             echo 'mislukt';

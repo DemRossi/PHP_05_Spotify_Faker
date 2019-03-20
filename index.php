@@ -1,8 +1,16 @@
 <?php
+  session_start();
+  if( isset($_SESSION['User']) ){
+    //user is logged in
+  }else{
+    //User not logged in
+    header('Location: login.php');
+  }
   $conn = new PDO("mysql:host=localhost;dbname=spotify", "root", "");
-  $statement = $conn->prepare("select name from artists");
-  $statement->execute();
-  $allArtists = $statement->fetchAll();
+  $stmnt1 = $conn->prepare("select * from artists");
+  $stmnt1->execute();
+  $allArtists = $stmnt1->fetchAll();
+  //var_dump($covers);
 
 ?><!DOCTYPE html>
 <html lang="en" >
@@ -76,9 +84,7 @@
       
       <span class="user__info__name">
       
-        <span class="first">Adam</span>
-        
-        <span class="last">Lowenthal</span>
+        <span class="first"><?php echo $_SESSION['Username']; ?></span>
         
       </span>
       
@@ -94,7 +100,7 @@
           <li><a href="#">Private Session</a></li>
           <li><a href="#">Account</a></li>
           <li><a href="#">Settings</a></li>
-          <li><a href="#">Log Out</a></li>
+          <li><a href="logout.php">Log Out</a></li>
         </ul>
       </div>
       
@@ -306,10 +312,13 @@
     <h1 class="title_index">Artisten</h1>
     <div class="artistsWrapper">
         <?php
-          foreach($allArtists as $a):
+          $i=1;
+          foreach($allArtists as $key => $a):
+            
         ?> 
-          <a href="#" class="artist__item"><span class="infoBlock" ><strong><?php echo $a['name']; ?></strong></span></a>
+          <a href="artist.php?id=<?php echo $key+1 ?>" class="artist__item"><span class="infoBlock"><strong><?php echo $a['name']; ?></strong></span></a>
         <?php
+            $i++;
           endforeach;
         ?>
     </div>

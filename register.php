@@ -7,7 +7,9 @@
         $user->setPasswordConfig($_POST['passwordConfig']);
         
         if( $user->register() ){
-            //session_start();
+            session_start();
+            $_SESSION['User'] = true;
+            $_SESSION['Username'] = $_POST['email'];
             header('Location: index.php');
         }else {
             $error = true;
