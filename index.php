@@ -1,10 +1,4 @@
-<?php
-  $conn = new PDO("mysql:host=localhost;dbname=spotify", "root", "");
-  $statement = $conn->prepare("select name from artists");
-  $statement->execute();
-  $allArtists = $statement->fetchAll();
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" >
 
 <head>
@@ -305,13 +299,10 @@
   <div class="content__middle content__index">
     <h1 class="title_index">Artisten</h1>
     <div class="artistsWrapper">
-        <?php
-          foreach($allArtists as $a):
-        ?> 
-          <a href="#" class="artist__item"><span class="infoBlock" ><strong><?php echo $a['name']; ?></strong></span></a>
-        <?php
-          endforeach;
-        ?>
+      
+          <a href="#" class="artist__item"><span class="infoBlock"><strong>Eveline Collins PhD</strong></span>
+        </a>
+        
     </div>
   </div>
   
